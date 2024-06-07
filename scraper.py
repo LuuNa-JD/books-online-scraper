@@ -4,6 +4,10 @@ import csv
 import os
 
 
+# URL de la page d'accueil du site à scraper
+base_url = "https://books.toscrape.com/"
+
+
 # Extraction des URLs des catégories
 def get_category_urls(base_url):
     response = requests.get(base_url)
@@ -93,6 +97,5 @@ def scrape_all_categories(base_url):
         save_books_data_to_csv(books_data, filename)
         print(f'Sauvegarde de {len(books_data)} livres dans le fichier : {filename}')
 
-# URL de la catégorie à scraper
-base_url = "https://books.toscrape.com/"
+# Exécution du script
 scrape_all_categories(base_url)
