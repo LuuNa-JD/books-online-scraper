@@ -43,7 +43,7 @@ def get_book_urls(category_url):
             category_url = None
     return book_urls
 
-# Extraction des données deslivre
+# Extraction des données des livre
 def get_book_data(book_url):
     response = requests.get(book_url)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -99,11 +99,14 @@ def save_books_data_to_csv(books_data, filename):
 
 # Récupération des données de tous les livres de toutes les catégorie
 def scrape_all_categories(base_url):
+    data_books_dir = 'data_books'
+    os.makedirs(data_books_dir, exist_ok=True)
+
     category_urls = get_category_urls(base_url)
     for category, url in category_urls.items():
         print(f'Scraping de la categorie: {category}')
         books_data = scrape_category(url, category.replace(" ", "_").lower())
-        filename = f'{category.replace(" ", "_").lower()}_books.csv'
+        filename = os.path.join(data_books_dir, f'{category.replace(" ", "_").lower()}_books.csv')
         save_books_data_to_csv(books_data, filename)
         print(f'Sauvegarde de {len(books_data)} livres dans le fichier : {filename}')
 
