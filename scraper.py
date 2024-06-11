@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import unicodedata
+import re
 import csv
 import os
 
@@ -7,6 +9,13 @@ import os
 # URL de la page d'accueil du site à scraper
 base_url = "https://books.toscrape.com/"
 
+# Fonction pour nettoyer les noms de fichiers
+def clean_filename(filename):
+    filename = unicodedata.normalize('NFKD', filename).encode('ascii', 'ignore').decode('ascii')
+    filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    filename = re.sub(r'\s+', '_', filename)
+    filename = re.sub(r'[^A-Za-z0-9._-]', '', filename)
+    return filename
 
 # Extraction des URLs des catégories
 def get_category_urls(base_url):
@@ -74,7 +83,8 @@ def scrape_category(category_url, category_name):
         book_data = get_book_data(book_url)
         all_books_data.append(book_data)
         if book_data['image_url']:
-            image_filename = os.path.join(image_dir, f"{book_data['title'].replace(' ', '_').replace('/', '_')}.jpg")
+            clean_title = clean_filename(book_data['title'])
+            image_filename = os.path.join(image_dir,  f"{clean_title}.jpg")
             download_image(book_data['image_url'], image_filename)
 
     return all_books_data
