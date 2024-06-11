@@ -83,7 +83,7 @@ def scrape_category(category_url, category_name):
         book_data = get_book_data(book_url)
         all_books_data.append(book_data)
         if book_data['image_url']:
-            clean_title = clean_filename(book_data['title'])
+            clean_title = clean_filename(book_data['title'])[:50]
             image_filename = os.path.join(image_dir,  f"{clean_title}.jpg")
             download_image(book_data['image_url'], image_filename)
 
