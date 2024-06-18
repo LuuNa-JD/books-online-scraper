@@ -17,6 +17,12 @@ def clean_filename(filename):
     filename = re.sub(r'[^A-Za-z0-9._-]', '', filename)
     return filename
 
+# Téléchargement d'une image
+def download_image(image_url, save_path):
+    response = requests.get(image_url)
+    with open(save_path, 'wb') as file:
+        file.write(response.content)
+
 # Extraction des URLs des catégories
 def get_category_urls(base_url):
     response = requests.get(base_url)
@@ -63,13 +69,6 @@ def get_book_data(book_url):
         'image_url': image_url
     }
     return data
-
-# Téléchargement d'une image
-def download_image(image_url, save_path):
-    response = requests.get(image_url)
-    with open(save_path, 'wb') as file:
-        file.write(response.content)
-
 
 # Récupération des données de tous les livres d'une catégorie
 def scrape_category(category_url, category_name):
